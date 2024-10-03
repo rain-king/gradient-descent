@@ -1,6 +1,6 @@
 //#![allow(warnings)]
 use std::io::stdin;
-use std::env;
+//use std::env;
 mod gradient_descent;
 use gradient_descent::gradient_descent;
 
@@ -25,20 +25,7 @@ fn main() {
 	
 	let (x, fx) = gradient_descent(f, variables, initial_guess, 0.8, 10000);
 	
-	// println!("The optimal x value is {:?}\nwith value of {}.", x, fx);
-
-	// for value in get_gradient(f, variables) {
-	// 	print!("{}\t\t", value);
-	// }
-	// println!();
-	// 
-	
-}
-
-fn read_bool() -> bool {
-	let mut input = String::new();
-	stdin().read_line(&mut input).unwrap();
-	input.trim() == "1"
+	println!("The optimal x value is {:?}\nwith value of {}.", x, fx);
 }
 
 fn read_string() -> String {

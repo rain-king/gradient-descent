@@ -1,4 +1,4 @@
-use exmex::{eval_str, parse, Differentiate, Express, FlatEx};
+use exmex::{Differentiate, Express, FlatEx};
 const THRESHOLD: f64 = 1E-8;
 
 pub fn gradient_descent(
@@ -42,8 +42,6 @@ pub fn gradient_descent(
 		if norm(&x_minus_new_x) < THRESHOLD {
 			println!("No further improvement noticed, stopping the algorithm succesfully.");
 			break;
-		} else {
-			x = new_x.clone();
 		}
 		
 		x = new_x;
