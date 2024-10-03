@@ -1,14 +1,14 @@
-#![allow(warnings)]
+//#![allow(warnings)]
 use std::io::stdin;
 use std::env;
 mod gradient_descent;
 use gradient_descent::gradient_descent;
 
 fn main() {
-	env::set_var("RUST_BACKTRACE", "1");
-	println!("{}\n{}", "Write 1 if this is a maximization problem,",
-		"or 0 if it's a minimization problem, then press Return again.");
-	let maximize = read_bool();
+	// env::set_var("RUST_BACKTRACE", "1");
+	// println!("{}\n{}", "Write 1 if this is a maximization problem,",
+	// 	"or 0 if it's a minimization problem, then press Return again.");
+	// let maximize = read_bool();
 	
 	println!("Write the variables in which f: R^n -> R to optimize is given:");
 	let variables = read_string_vec_sorted();
@@ -21,9 +21,11 @@ fn main() {
 
 	let f = exmex::parse::<f64>(&str_f).expect("Couldn't parse string to algebra system.");
 	
-	let (x, fx) = gradient_descent(f, variables, initial_guess, 1.0, 10000);
+	println!("{f}");
 	
-	println!("The optimal x value is {:?}\nwith value of {}.", x, fx);
+	let (x, fx) = gradient_descent(f, variables, initial_guess, 0.8, 10000);
+	
+	// println!("The optimal x value is {:?}\nwith value of {}.", x, fx);
 
 	// for value in get_gradient(f, variables) {
 	// 	print!("{}\t\t", value);
