@@ -1,37 +1,62 @@
-// #![allow(warnings)]
-mod nalgebra_io;
-use nalgebra as na;
-use nalgebra_io as io;
-use simplex::dual_simplex;
+#![allow(warnings)]
 use std::io::stdin;
-use std::io::BufRead; // needed to read empty lines without storing them
+use std::env;
+mod gradient_descent;
+use gradient_descent::gradient_descent;
 
 fn main() {
-	println!("This is a program that solves the maximization or minimization of");
-	println!("Z = cx subject to Ax <= b, A_eq = b_eq, with free b and b_eq,");
-	println!("but x >= 0.");
-	println!();
-
+	env::set_var("RUST_BACKTRACE", "1");
 	println!("{}\n{}", "Write 1 if this is a maximization problem,",
 		"or 0 if it's a minimization problem, then press Return again.");
 	let maximize = read_bool();
-	stdin().lock().lines().next(); // read empty line
-
-	let c = io::read_row("Enter the c vector values separated by spaces, then press return again.");
-	stdin().lock().lines().next(); // read empty line
-
-	let a = io::read_matrix(&format!("{}{}",
-		 "Enter the A matrix values row by row, with values separated by spaces,\n",
-		 "then press Return again."));
-
-	let b = io::read_column("Enter the b column values separated by spaces, then press return again.");
-	stdin().lock().lines().next();
 	
-	dual_simplex(maximize, &c, &a, &b);
+	println!("Write the variables in which f: R^n -> R to optimize is given:");
+	let variables = read_string_vec_sorted();
+
+	println!("Write the function x -> f(x) to optimize:");
+	let str_f = read_string();
+	
+	println!("Give an initial guess to the solution:");
+	let initial_guess = read_vec_f64();
+
+	let f = exmex::parse::<f64>(&str_f).expect("Couldn't parse string to algebra system.");
+	
+	let (x, fx) = gradient_descent(f, variables, initial_guess, 1.0, 10000);
+	
+	println!("The optimal x value is {:?}\nwith value of {}.", x, fx);
+
+	// for value in get_gradient(f, variables) {
+	// 	print!("{}\t\t", value);
+	// }
+	// println!();
+	// 
+	
 }
 
 fn read_bool() -> bool {
 	let mut input = String::new();
 	stdin().read_line(&mut input).unwrap();
 	input.trim() == "1"
+}
+
+fn read_string() -> String {
+	let mut line = String::new();
+	stdin().read_line(&mut line).unwrap();
+	line.trim().to_string()
+}
+
+fn read_string_vec_sorted() -> Vec<String> {
+	let mut line = String::new();
+	stdin().read_line(&mut line).unwrap();
+	let mut vec: Vec<String>;
+	vec = line.split_whitespace().map(|s| s.trim().to_string()).collect();
+	vec.sort();
+	vec
+}
+
+fn read_vec_f64() -> Vec<f64> {
+	let mut line = String::new();
+	stdin().read_line(&mut line).unwrap();
+	
+	line.split_whitespace().map(|s| s.parse::<f64>().unwrap()).collect()
 }

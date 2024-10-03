@@ -1,0 +1,3 @@
+optimal solution:
+x = (1, 2)
+f(x) = 0

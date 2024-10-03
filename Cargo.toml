@@ -1,0 +1,7 @@
+[package]
+name = "nonlp"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+exmex = {version = "0.20.3", features = ["partial"] }
